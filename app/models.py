@@ -1,7 +1,7 @@
 from sqlmodel import Field, SQLModel, create_engine
 from datetime import datetime
 
-class clients(SQLModel, table=True):
+class Clients(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="users.id")
     last_name : str
@@ -10,18 +10,18 @@ class clients(SQLModel, table=True):
     phone_number : int
     mail : str
 
-class users(SQLModel, table=True):
+class Users(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     role_id : int = Field(foreign_key="roles.id")
     username : str
     password : str
 
-class roles(SQLModel, table=True):
+class Roles(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     name : str
     access : str
 
-class commandes(SQLModel, table=True):
+class Commandes(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     client_id : int = Field(foreign_key="clients.id")
     statut_id : int = Field(foreign_key="statuts.id")
@@ -29,16 +29,16 @@ class commandes(SQLModel, table=True):
     quantite : int
     date : datetime
 
-class statuts(SQLModel, table=True):
+class Statuts(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     statut : str
 
-class commandes_articles(SQLModel, table=True):
+class CommandesArticles(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     commandes_id : int = Field(foreign_key="commandes.id")
     articles_id : int = Field(foreign_key="articles.id")
 
-class articles(SQLModel, table=True):
+class Articles(SQLModel, table=True):
     id : int | None = Field(default=None, primary_key=True)
     name : str
     price : int
