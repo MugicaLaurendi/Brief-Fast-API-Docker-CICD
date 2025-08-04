@@ -4,9 +4,9 @@ from datetime import datetime
 class clients(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     user_id: int = Field(foreign_key="users.id")
-    name : str
     last_name : str
-    address : str
+    name : str
+    adress : str
     phone_number : int
     mail : str
 
@@ -43,7 +43,7 @@ class articles(SQLModel, table=True):
     name : str
     price : int
     category : str
-    desription : str
+    description: str
     stock : int
 
 

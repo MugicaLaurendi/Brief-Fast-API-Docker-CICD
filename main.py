@@ -2,14 +2,13 @@ from fastapi import FastAPI
 import os
 from contextlib import asynccontextmanager
 from app.setup_db import setup_db
-from app.models import engine, SQLModel 
+from app.models import engine
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    if os.getenv("ENV", "local") == "local" and not getattr(app.state, "_seeded", False):
+    if os.getenv("ENV", "local") == "local" and not os.path.exists("database.db"):
         setup_db()
-        app.state._seeded = True
     yield
     engine.dispose()
 

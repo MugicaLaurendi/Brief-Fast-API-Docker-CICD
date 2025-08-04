@@ -1,4 +1,4 @@
-id,user_id,nom,prenom,adresse,telephone,email
+id,user_id,last_name,name,adress,phone_number,mail
 1,1,Olivier,Suzanne,"rue de Diallo, 54122 Guichard-les-Bains",04 02 24 23 87,laure77@ifrance.com
 2,2,Rodrigues,Patricia,"43, boulevard Perret, 62304 Ferrand-les-Bains",+33 4 86 62 14 91,ogosselin@germain.fr
 3,3,Letellier,Christiane,"3, avenue Goncalves, 82520 Charpentierboeuf",+33 1 12 19 66 96,theophilesimon@yahoo.fr

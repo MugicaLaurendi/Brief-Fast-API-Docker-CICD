@@ -1,4 +1,4 @@
-id,client_id,statut,prix,quantite,date
+id,client_id,statut_id,prix,quantite,date
 1,38,prete,68.08,3,2024-11-14
 2,65,en preparation,35.61,5,2025-07-17
 3,95,en preparation,81.75,4,2024-08-03
