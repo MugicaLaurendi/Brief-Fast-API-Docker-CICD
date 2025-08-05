@@ -1,7 +1,7 @@
 import csv
 from pathlib import Path
 from sqlmodel import Session, insert
-from app.models import engine, init_db, Roles, Statuts, Articles, Users, Clients, Commandes, CommandesArticles
+from app.models import engine, init_db, Roles, Status, Articles, Clients, Commandes, CommandesArticles
 from datetime import datetime
 
 CSV_DIR = Path(__file__).parent.parent / "csv"
@@ -30,9 +30,8 @@ def setup_db(seed_csv=True):
     with Session(engine) as session:
         session.execute(insert(Roles), load_csv("roles.csv"))
         session.execute(insert(Articles), load_csv("articles.csv"))
-        session.execute(insert(Statuts), load_csv("statuts.csv"))
-        session.execute(insert(Users), load_csv("users.csv"))
+        session.execute(insert(Status), load_csv("status.csv"))
         session.execute(insert(Clients), load_csv("clients.csv"))
         session.execute(insert(Commandes), list(load_stock_commandes()))
-        session.execute(insert(CommandesArticles), load_csv("commandes_articles.csv"))
+        # session.execute(insert(CommandesArticles), load_csv("commandes_articles.csv"))
         session.commit()

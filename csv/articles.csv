@@ -1,4 +1,4 @@
-id,name,price,category,description,stock
+id,nom,prix,categorie,description,stock
 1,Café,5.25,Plat,"Accord six terrain français.",39
 2,Couscous,12.88,Dessert,"Rapporter espace humain race cou.",47
 3,Jus d’orange,13.74,Plat,"Donc dehors en moitié.",31
