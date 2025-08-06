@@ -78,7 +78,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
 @router.get("/par-date/{date_commande}", response_model=List[Commandes])
 def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
     commandes = session.exec(
-        select(Commandes).where(Commandes.date == date_commande)
+        select(Commandes).where(Commandes.date.cast(date) == date_commande)
     ).all()
 
     if not commandes:
