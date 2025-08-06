@@ -158,18 +158,3 @@ def update_client(commande_id: int, nouveau_status: int, session: Session = Depe
     statement = select(Commandes).where(Commandes.id == commande_id)
     commande_final = session.exec(statement).first()
     return commande_final
-
-
-
-    # db_client = session.get(Clients, client_id)
-
-    # if not db_client:
-    #     raise HTTPException(status_code=404, detail="Client non trouvé")
-
-    # for field, value in updated_client.model_dump(exclude_unset=True).items():
-    #     setattr(db_client, field, value)
-
-    # session.add(db_client)
-    # session.commit()
-    # session.refresh(db_client)
-    # return db_client
