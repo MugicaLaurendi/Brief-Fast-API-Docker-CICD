@@ -1,11 +1,7 @@
 from typing import Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.models import *
-<<<<<<< Updated upstream
-from datetime import date
-=======
 from datetime import date, datetime, time
->>>>>>> Stashed changes
 import datetime as dt
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
