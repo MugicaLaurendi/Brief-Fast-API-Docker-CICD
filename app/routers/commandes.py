@@ -19,8 +19,8 @@ router = APIRouter(prefix="/commandes", tags=["Commandes"])
 #    GESTION DES COMMANDES
 # ===========================
 
-# Creer une commande
-@router.get("/creercommande/")
+# creer une nouvelle commande
+@router.get("/creer/")
 def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(get_session) ):
 
     with db as session:
@@ -83,7 +83,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
 
 
 # Consulter les commandes par date
-@router.get("/par-date/{date_commande}", response_model=List[Commandes])
+@router.get("/par_date/{date_commande}", response_model=List[Commandes])
 def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
     start_datetime = datetime.combine(date_commande, time.min)
     end_datetime = datetime.combine(date_commande, time.max)
@@ -99,7 +99,7 @@ def get_commandes_by_date(date_commande: date, session: Session = Depends(get_se
 
 
 # Consulter les commandes par client
-@router.get("/par-client/{client_id}", response_model=List[CommandeWithArticlesNoIds])
+@router.get("/par_client/{client_id}", response_model=List[CommandeWithArticlesNoIds])
 def get_commandes_by_client_with_articles(
     client_id: int,
     session: Session = Depends(get_session),
@@ -138,3 +138,38 @@ def get_commandes_by_client_with_articles(
         })
 
     return result
+
+
+# Modifier le statut d'une commande
+@router.put("/modifier_statut")
+def update_client(commande_id: int, nouveau_status: int, session: Session = Depends(get_session)):
+
+    statement = select(Commandes).where(Commandes.id == commande_id)
+    commande = session.exec(statement).first()
+
+    if not commande:
+        raise HTTPException(status_code=404, detail="Client non trouvé")
+
+    commande.status_id = nouveau_status
+
+    session.add(commande)
+    session.commit()
+    
+    statement = select(Commandes).where(Commandes.id == commande_id)
+    commande_final = session.exec(statement).first()
+    return commande_final
+
+
+
+    # db_client = session.get(Clients, client_id)
+
+    # if not db_client:
+    #     raise HTTPException(status_code=404, detail="Client non trouvé")
+
+    # for field, value in updated_client.model_dump(exclude_unset=True).items():
+    #     setattr(db_client, field, value)
+
+    # session.add(db_client)
+    # session.commit()
+    # session.refresh(db_client)
+    # return db_client
