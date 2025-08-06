@@ -1,15 +1,27 @@
 from typing import Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.models import *
-import datetime
+from datetime import date
+from fastapi import APIRouter, Depends, HTTPException
+from typing import List
+import json
+
+router = APIRouter(prefix="/commandes", tags=["Commandes"])
 
 
-def creer_commande(id_client, id_articles_et_quantites):
+@router.get("/creercommande/")
+def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(get_session) ):
 
-    with Session(engine) as session:
+    with db as session:
+        
+        try:
+            id_articles_et_quantites = json.loads(id_articles_et_quantites)
+        
+        except json.JSONDecodeError:
 
+            return {"error": "Invalid dict format"}
+        
         # checker si client existe
-
         statement = select(Clients).where(Clients.id == id_client)
         client = session.exec(statement).first()
         if client == None :
@@ -57,3 +69,18 @@ def creer_commande(id_client, id_articles_et_quantites):
         statement = select(Commandes).where(Commandes.id == commande.id)
         final_commande = session.exec(statement).first()
         return final_commande
+
+
+# ================================
+# Consulter les commandes par date
+# ================================
+@router.get("/par-date/{date_commande}", response_model=List[Commandes])
+def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
+    commandes = session.exec(
+        select(Commandes).where(Commandes.date.cast(date) == date_commande)
+    ).all()
+
+    if not commandes:
+        raise HTTPException(status_code=404, detail="Aucune commande trouvée pour cette date")
+
+    return commandes

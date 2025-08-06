@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, create_engine
+from sqlmodel import Field, SQLModel, create_engine, Session
 from datetime import datetime
 from pydantic.networks import EmailStr
 
@@ -9,7 +9,7 @@ class Clients(SQLModel, table=True):
     nom         : str
     prenom      : str
     adresse     : str
-    telephone   : int
+    telephone   : str
     email       : EmailStr
     username    : str
     password    : str
@@ -52,3 +52,9 @@ engine = create_engine(sqlite_url, echo=True)
 
 def init_db():
     SQLModel.metadata.create_all(engine)
+
+
+# Ouverture session DB
+def get_session():
+    with Session(engine) as session:
+        yield session
