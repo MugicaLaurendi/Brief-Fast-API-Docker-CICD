@@ -2,6 +2,7 @@ from typing import Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.models import *
 from datetime import date
+import datetime as dt
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 import json
@@ -29,7 +30,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
         
         # creer dans la table commandes une commande avec un prix a 0
 
-        commande = Commandes(client_id= id_client, status_id= 1 , prix= 0 , date= datetime.datetime.now())
+        commande = Commandes(client_id= id_client, status_id= 1 , prix= 0 , date= dt.datetime.now())
         commande_id = 0
         session.add(commande)
         session.commit()
@@ -77,7 +78,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
 @router.get("/par-date/{date_commande}", response_model=List[Commandes])
 def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
     commandes = session.exec(
-        select(Commandes).where(Commandes.date.cast(date) == date_commande)
+        select(Commandes).where(Commandes.date == date_commande)
     ).all()
 
     if not commandes:
