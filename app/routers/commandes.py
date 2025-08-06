@@ -1,7 +1,7 @@
 from typing import Union
 from sqlmodel import Field, Session, SQLModel, create_engine, select
 from app.models import *
-from datetime import date
+from datetime import date, datetime, time
 import datetime as dt
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
@@ -77,8 +77,11 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
 # ================================
 @router.get("/par-date/{date_commande}", response_model=List[Commandes])
 def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
+    start_datetime = datetime.combine(date_commande, time.min)
+    end_datetime = datetime.combine(date_commande, time.max)
+
     commandes = session.exec(
-        select(Commandes).where(Commandes.date.cast(date) == date_commande)
+        select(Commandes).where(Commandes.date >= start_datetime, Commandes.date <= end_datetime)
     ).all()
 
     if not commandes:
