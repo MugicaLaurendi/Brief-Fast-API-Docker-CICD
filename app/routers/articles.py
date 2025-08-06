@@ -1,13 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlmodel import select, Session
 from typing import List
-from app.models import Articles
+
+from app.models import Articles, get_session
 from app.schemas import ArticleCreate, ArticleRead, ArticleUpdate
-from app.models import get_session
-from sqlmodel import select
-from sqlmodel import Session
+
+
 
 router = APIRouter(prefix="/articles", tags=["Articles"])
 
+
+
+# ===========================
+#   CRUD COMPLET DES ARTICLES
+# ===========================
+
+
+# Creer un article
 @router.post("/articles/", response_model=ArticleRead, status_code=status.HTTP_201_CREATED)
 def create_article(article: ArticleCreate, db: Session = Depends(get_session)):
     db_item = Articles.from_orm(article)
@@ -16,10 +25,14 @@ def create_article(article: ArticleCreate, db: Session = Depends(get_session)):
     db.refresh(db_item)
     return db_item
 
+
+# Lire tous les articles
 @router.get("/articles/", response_model=List[ArticleRead])
 def list_articles(db: Session = Depends(get_session)):
     return db.exec(select(Articles)).all()
 
+
+# Lire un article par ID
 @router.get("/articles/{article_id}", response_model=ArticleRead)
 def get_article(article_id: int, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
@@ -27,6 +40,8 @@ def get_article(article_id: int, db: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Articles non trouvé")
     return item
 
+
+# Modifier un article
 @router.put("/articles/{article_id}", response_model=ArticleRead)
 def update_article(article_id: int, article: ArticleCreate, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
@@ -37,6 +52,8 @@ def update_article(article_id: int, article: ArticleCreate, db: Session = Depend
     db.add(item); db.commit(); db.refresh(item)
     return item
 
+
+# Mettre à jour partiellement un article
 @router.patch("/articles/{article_id}", response_model=ArticleRead)
 def patch_article(article_id: int, article: ArticleUpdate, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
@@ -48,6 +65,8 @@ def patch_article(article_id: int, article: ArticleUpdate, db: Session = Depends
     db.add(item); db.commit(); db.refresh(item)
     return item
 
+
+# Supprimer un article
 @router.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_article(article_id: int, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)

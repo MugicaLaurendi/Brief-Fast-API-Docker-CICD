@@ -1,15 +1,25 @@
-from typing import Union
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from app.models import *
+from fastapi import APIRouter, Depends, HTTPException
+from sqlmodel import Session, select
+from sqlalchemy import join
 from datetime import date, datetime, time
 import datetime as dt
-from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 import json
+
+from app.models import *
+from app.schemas import CommandeWithArticlesNoIds
+
+
 
 router = APIRouter(prefix="/commandes", tags=["Commandes"])
 
 
+
+# ===========================
+#    GESTION DES COMMANDES
+# ===========================
+
+# Creer une commande
 @router.get("/creercommande/")
 def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(get_session) ):
 
@@ -72,9 +82,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
         return final_commande
 
 
-# ================================
 # Consulter les commandes par date
-# ================================
 @router.get("/par-date/{date_commande}", response_model=List[Commandes])
 def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
     start_datetime = datetime.combine(date_commande, time.min)
@@ -88,3 +96,44 @@ def get_commandes_by_date(date_commande: date, session: Session = Depends(get_se
         raise HTTPException(status_code=404, detail="Aucune commande trouvée pour cette date")
 
     return commandes
+
+
+# Consulter les commandes par client
+@router.get("/par-client/{client_id}", response_model=List[CommandeWithArticlesNoIds])
+def get_commandes_by_client_with_articles(
+    client_id: int,
+    session: Session = Depends(get_session),
+):
+    j = (
+        join(Commandes, CommandesArticles, Commandes.id == CommandesArticles.commande_id)
+        .join(Articles, CommandesArticles.article_id == Articles.id)
+    )
+
+    stmt = (
+        select(Commandes, Articles)
+        .select_from(j)
+        .where(Commandes.client_id == client_id)
+    )
+
+    rows = session.exec(stmt).all()
+    if not rows:
+        raise HTTPException(status_code=404, detail="Aucune commande pour ce client")
+
+    commandes_map = {}
+    for commande, article in rows:
+        cmd = commandes_map.setdefault(commande.id, {
+            "commande": commande,
+            "articles": []
+        })
+        cmd["articles"].append(article)
+
+    result = []
+    for data in commandes_map.values():
+        result.append({
+            "id": data["commande"].id,
+            "date": data["commande"].date,
+            "client_id": data["commande"].client_id,
+            "articles": data["articles"]
+        })
+
+    return result

@@ -1,5 +1,7 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from typing import Optional
+from datetime import datetime
+
 
 # Modèle pour créer un client
 class ClientCreate(BaseModel):
@@ -61,3 +63,16 @@ class ArticleUpdate(BaseModel):
     categorie: Optional[str] = None
     description: Optional[str] = None
     stock: Optional[int] = None
+
+class ArticleNoId(BaseModel):
+    nom: str
+    prix: float
+    categorie: str
+    description: str
+    stock: int
+
+class CommandeWithArticlesNoIds(BaseModel):
+    id: int
+    date: datetime
+    client_id: int
+    articles: list[ArticleNoId]

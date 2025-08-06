@@ -1,21 +1,18 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session, select
 from typing import List
-from app.models import Clients, Roles ,engine
+
+from app.models import Clients, Roles, get_session
 from app.schemas import ClientCreate, ClientUpdate, ClientRead
 
 
 
 router = APIRouter(prefix="/clients", tags=["Clients"])
 
-#  Ouverture session DB
-def get_session():
-    with Session(engine) as session:
-        yield session
 
 
 # ===========================
-#   CRUD COMPLET DES CLIENTS
+#    CRUD COMPLET DES CLIENTS
 # ===========================
 
 # Lire tous les clients
