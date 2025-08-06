@@ -24,21 +24,22 @@ class Commandes(SQLModel, table=True):
     client_id   : int = Field(foreign_key="clients.id")
     status_id   : int = Field(foreign_key="status.id")
     prix        : float
-    quantite    : int
     date        : datetime
 
 class Status(SQLModel, table=True):
     id          : int | None = Field(default=None, primary_key=True)
     status      : str
 
-class CommandesArticles(SQLModel, table=False):
-    commandes_id    : int = Field(foreign_key="commandes.id")
-    articles_id     : int = Field(foreign_key="articles.id")
+class CommandesArticles(SQLModel, table=True):
+    id             : int | None = Field(default=None, primary_key=True)
+    commande_id    : int = Field(foreign_key="commandes.id")
+    article_id     : int = Field(foreign_key="articles.id")
+    quantite       : int
 
 class Articles(SQLModel, table=True):
     id          : int | None = Field(default=None, primary_key=True)
     nom         : str
-    prix        : int
+    prix        : float
     categorie   : str
     description : str
     stock       : int

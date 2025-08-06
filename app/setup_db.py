@@ -33,5 +33,7 @@ def setup_db(seed_csv=True):
         session.execute(insert(Status), load_csv("status.csv"))
         session.execute(insert(Clients), load_csv("clients.csv"))
         session.execute(insert(Commandes), list(load_stock_commandes()))
-        # session.execute(insert(CommandesArticles), load_csv("commandes_articles.csv"))
+        session.execute(insert(CommandesArticles), load_csv("commandes_articles.csv"))
         session.commit()
+
+    print("---------------- DATABASE CREATED --------------------")
