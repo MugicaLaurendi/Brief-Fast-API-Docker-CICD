@@ -38,3 +38,26 @@ class ClientRead(BaseModel):
     
     class Config:
         from_attributes = True  # permet de convertir depuis un objet SQLModel
+
+
+class ArticleCreate(BaseModel):
+    nom: str
+    prix: float
+    categorie: str
+    description: str
+    stock: int
+
+class ArticleRead(BaseModel):
+    id: int
+    nom: str
+    prix: float
+    categorie: str
+    description: str
+    stock: int
+
+class ArticleUpdate(BaseModel):
+    nom: Optional[str] = None
+    prix: Optional[float] = None
+    categorie: Optional[str] = None
+    description: Optional[str] = None
+    stock: Optional[int] = None
