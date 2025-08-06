@@ -2,7 +2,7 @@ from fastapi import FastAPI, Query
 import os
 from contextlib import asynccontextmanager
 from app.setup_db import setup_db
-from app.routers.commandes import *
+from app.routers import commandes, clients
 from app.models import *
 import json
 
@@ -15,14 +15,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-@app.get("/creercommande/")
-def get_dict(id_client : int, id_articles_et_quantites: str = Query(...)):
 
-    try:
-        id_articles_et_quantites_parsed = json.loads(id_articles_et_quantites)
-        
-        return {"commande": creer_commande(id_client, id_articles_et_quantites_parsed)}
-    
-    except json.JSONDecodeError:
-
-        return {"error": "Invalid dict format"}
+app.include_router(commandes.router)
+app.include_router(clients.router)
