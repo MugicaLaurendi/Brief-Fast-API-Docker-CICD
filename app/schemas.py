@@ -75,4 +75,6 @@ class CommandeWithArticlesNoIds(BaseModel):
     id: int
     date: datetime
     client_id: int
+    prix : float
     articles: list[ArticleNoId]
+

@@ -133,6 +133,7 @@ def get_commandes_by_client_with_articles(
             "id": data["commande"].id,
             "date": data["commande"].date,
             "client_id": data["commande"].client_id,
+            "prix": data["commande"].prix,
             "articles": data["articles"]
         })
 
