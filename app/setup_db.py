@@ -1,8 +1,10 @@
 import csv
 from pathlib import Path
 from sqlmodel import Session, insert
-from app.models import engine, init_db, Roles, Status, Articles, Clients, Commandes, CommandesArticles
 from datetime import datetime
+
+from app.models import engine, init_db, Roles, Status, Articles, Clients, Commandes, CommandesArticles
+
 
 CSV_DIR = Path(__file__).parent.parent / "csv"
 
