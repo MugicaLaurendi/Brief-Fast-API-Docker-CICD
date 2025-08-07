@@ -4,3 +4,5 @@ env
 *.db
 database.db
 __pycache__
+.env
+venv_mongo
