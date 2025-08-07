@@ -1,8 +1,12 @@
 venv
 env
+venv_mongo
+
 .venv
+.env
+
 *.db
 database.db
+
 __pycache__
-.env
-venv_mongo
+

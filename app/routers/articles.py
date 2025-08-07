@@ -4,6 +4,7 @@ from typing import List
 
 from app.models import Articles, get_session
 from app.schemas import ArticleCreate, ArticleRead, ArticleUpdate
+from app.security import require_role
 
 
 
@@ -17,7 +18,7 @@ router = APIRouter(prefix="/articles", tags=["Articles"])
 
 
 # Creer un article
-@router.post("/articles/", response_model=ArticleRead, status_code=status.HTTP_201_CREATED)
+@router.post("/articles/", response_model=ArticleRead, status_code=status.HTTP_201_CREATED, dependencies=[Depends(require_role([1]))])
 def create_article(article: ArticleCreate, db: Session = Depends(get_session)):
     db_item = Articles.from_orm(article)
     db.add(db_item)
@@ -27,13 +28,13 @@ def create_article(article: ArticleCreate, db: Session = Depends(get_session)):
 
 
 # Lire tous les articles
-@router.get("/articles/", response_model=List[ArticleRead])
+@router.get("/articles/", response_model=List[ArticleRead], dependencies=[Depends(require_role([1,2,3]))])
 def list_articles(db: Session = Depends(get_session)):
     return db.exec(select(Articles)).all()
 
 
 # Lire un article par ID
-@router.get("/articles/{article_id}", response_model=ArticleRead)
+@router.get("/articles/{article_id}", response_model=ArticleRead, dependencies=[Depends(require_role([1,2,3]))])
 def get_article(article_id: int, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
     if not item:
@@ -42,7 +43,7 @@ def get_article(article_id: int, db: Session = Depends(get_session)):
 
 
 # Modifier un article
-@router.put("/articles/{article_id}", response_model=ArticleRead)
+@router.put("/articles/{article_id}", response_model=ArticleRead, dependencies=[Depends(require_role([1]))])
 def update_article(article_id: int, article: ArticleCreate, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
     if not item:
@@ -54,7 +55,7 @@ def update_article(article_id: int, article: ArticleCreate, db: Session = Depend
 
 
 # Mettre à jour partiellement un article
-@router.patch("/articles/{article_id}", response_model=ArticleRead)
+@router.patch("/articles/{article_id}", response_model=ArticleRead, dependencies=[Depends(require_role([1,2]))])
 def patch_article(article_id: int, article: ArticleUpdate, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
     if not item:
@@ -67,7 +68,7 @@ def patch_article(article_id: int, article: ArticleUpdate, db: Session = Depends
 
 
 # Supprimer un article
-@router.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/articles/{article_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(require_role([1]))])
 def delete_article(article_id: int, db: Session = Depends(get_session)):
     item = db.get(Articles, article_id)
     if not item:

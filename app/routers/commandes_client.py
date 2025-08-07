@@ -12,21 +12,22 @@ from app.security import require_role, get_current_user
 
 
 
-router = APIRouter(prefix="/commandes", tags=["Commandes"])
+router = APIRouter(prefix="/commandes_client", tags=["Commandes_client"])
 
 
 
 # ===========================
-#    GESTION DES COMMANDES
+# GESTION DES COMMANDES DU CLIENT
 # ===========================
 
 
 # creer une nouvelle commande
-@router.get("/creer/", dependencies=[Depends(require_role([1,2]))])
-def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(get_session)):
-
+@router.get("/creer/")
+def creer_commande_client(id_articles_et_quantites, current_user: Clients = Depends(get_current_user), db: Session = Depends(get_session)):
+    id_client = current_user.id
+   
     with db as session:
-        
+
         try:
             id_articles_et_quantites = json.loads(id_articles_et_quantites)
         
@@ -84,28 +85,13 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
         return final_commande
 
 
-# Consulter les commandes par date
-@router.get("/par_date/{date_commande}", response_model=List[Commandes], dependencies=[Depends(require_role([1,2]))])
-def get_commandes_by_date(date_commande: date, session: Session = Depends(get_session)):
-    start_datetime = datetime.combine(date_commande, time.min)
-    end_datetime = datetime.combine(date_commande, time.max)
-
-    commandes = session.exec(
-        select(Commandes).where(Commandes.date >= start_datetime, Commandes.date <= end_datetime)
-    ).all()
-
-    if not commandes:
-        raise HTTPException(status_code=404, detail="Aucune commande trouvée pour cette date")
-
-    return commandes
-
-
-# Consulter les commandes par client
-@router.get("/par_client/{client_id}", response_model=List[CommandeWithArticlesNoIds], dependencies=[Depends(require_role([1,2,3]))])
-def get_commandes_by_client_with_articles(
-    client_id: int,
+# Consulter les commandes DU client
+@router.get("/par_client/", response_model=List[CommandeWithArticlesNoIds], dependencies=[Depends(require_role([1,2,3]))])
+def get_commandes_by_client_with_articles_by_user(
+    current_user: Clients = Depends(get_current_user),
     session: Session = Depends(get_session),
 ):
+    client_id = current_user.id
     j = (
         join(Commandes, CommandesArticles, Commandes.id == CommandesArticles.commande_id)
         .join(Articles, CommandesArticles.article_id == Articles.id)
@@ -140,23 +126,3 @@ def get_commandes_by_client_with_articles(
         })
 
     return result
-
-
-# Modifier le statut d'une commande
-@router.put("/modifier_statut", dependencies=[Depends(require_role([1,2]))])
-def update_client(commande_id: int, nouveau_status: int, session: Session = Depends(get_session)):
-
-    statement = select(Commandes).where(Commandes.id == commande_id)
-    commande = session.exec(statement).first()
-
-    if not commande:
-        raise HTTPException(status_code=404, detail="Client non trouvé")
-
-    commande.status_id = nouveau_status
-
-    session.add(commande)
-    session.commit()
-    
-    statement = select(Commandes).where(Commandes.id == commande_id)
-    commande_final = session.exec(statement).first()
-    return commande_final

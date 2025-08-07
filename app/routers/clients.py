@@ -4,8 +4,7 @@ from typing import List
 
 from app.models import Clients, Roles, get_session
 from app.schemas import ClientCreate, ClientUpdate, ClientRead
-
-from app.security import get_current_user, require_role
+from app.security import get_current_user, require_role, get_password_hash
 
 
 
@@ -16,6 +15,7 @@ router = APIRouter(prefix="/clients", tags=["Clients"])
 # ===========================
 #    CRUD COMPLET DES CLIENTS
 # ===========================
+
 
 # Lire tous les clients
 @router.get("/", response_model=List[ClientRead], dependencies=[Depends(require_role([1,2]))])
@@ -49,6 +49,8 @@ def create_client(client_data: ClientCreate, session: Session = Depends(get_sess
 
     # Créer le client avec le role_id trouvé
     new_client = Clients(**client_data.model_dump(), role_id=role_client.id)
+    # Hacher le mot de passe
+    new_client.password = get_password_hash(new_client.password)
 
     session.add(new_client)
     session.commit()
@@ -56,7 +58,7 @@ def create_client(client_data: ClientCreate, session: Session = Depends(get_sess
     return new_client
 
 
-@router.get("/me", response_model=ClientRead)
+@router.get("/users/me", response_model=ClientRead)
 def get_my_profile(current_user: Clients = Depends(get_current_user)):
     return current_user
 
