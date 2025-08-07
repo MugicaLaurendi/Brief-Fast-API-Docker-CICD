@@ -21,17 +21,20 @@ Le projet est composé de plusieurs fichiers.
 ### roots
  - main.py -> lancer le projet
 
+## Faire son .env à la root
+
+```
+SECRET_KEY="change-this-key-to-a-random-long-secret"
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+ALGORITHM=HS256
+```
+
 ## Lancer l'application
 
 ```bash
 fastapi dev main.py
 ```
-
-
-table user role -> commande client
-table permission -> tel role tel droit
-
-table=false
 
 
 
