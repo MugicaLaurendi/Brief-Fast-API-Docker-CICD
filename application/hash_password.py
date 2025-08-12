@@ -15,5 +15,4 @@ def hash_existing_passwords():
     session.commit()
     print("✅ Tous les mots de passe ont été hashés avec succès.")
 
-if __name__ == "__main__":
-    hash_existing_passwords()
+
