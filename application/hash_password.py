@@ -1,5 +1,6 @@
 from sqlmodel import select
-from app.models import Clients, get_session
+from app.models import Clients
+from app.database_connection import get_session
 from app.security import get_password_hash
 
 def hash_existing_passwords():
@@ -14,5 +15,4 @@ def hash_existing_passwords():
     session.commit()
     print("✅ Tous les mots de passe ont été hashés avec succès.")
 
-if __name__ == "__main__":
-    hash_existing_passwords()
+

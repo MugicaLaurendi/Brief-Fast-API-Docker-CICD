@@ -1,4 +1,4 @@
-from sqlmodel import Field, SQLModel, create_engine, Session
+from sqlmodel import Field, SQLModel
 from datetime import datetime
 from pydantic.networks import EmailStr
 
@@ -45,16 +45,3 @@ class Articles(SQLModel, table=True):
     stock       : int
 
 
-sqlite_file_name = "database.db"
-sqlite_url = f"sqlite:///{sqlite_file_name}"
-
-engine = create_engine(sqlite_url, echo=True)
-
-def init_db():
-    SQLModel.metadata.create_all(engine)
-
-
-# Ouverture session DB
-def get_session():
-    with Session(engine) as session:
-        yield session

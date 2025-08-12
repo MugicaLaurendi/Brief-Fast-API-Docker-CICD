@@ -2,7 +2,8 @@ from fastapi import APIRouter, HTTPException, Depends
 from sqlmodel import Session, select
 from typing import List
 
-from app.models import Clients, Roles, get_session
+from app.models import Clients, Roles
+from app.database_connection import get_session
 from app.schemas import ClientCreate, ClientUpdate, ClientRead
 from app.security import get_current_user, require_role, get_password_hash
 
