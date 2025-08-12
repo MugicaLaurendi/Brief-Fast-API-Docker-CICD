@@ -99,3 +99,6 @@ id,role_id,nom,prenom,adresse,telephone,email,username,password
 98,2,Bègue,Valérie,"rue Blanchard, 05621 Leleu-les-Bains",08 00 10 15 73,olivie63@maury.com,lucieroy,xWWmbb+q)1
 99,3,Tanguy,Odette,"8, chemin Colas, 77382 Salmon",+33 (0)1 29 97 98 00,duprepatricia@noos.fr,dbarthelemy,vy(+3VQv+_
 100,1,Michel,Margot,"7, rue de Garcia, 61952 VasseurBourg",+33 5 30 25 87 95,lucasdias@girard.com,vmunoz,V&3DIB6#wf
+101,1,laurendi,mugica,nope,01010101,lnope@gmail.com,laurendi,laurendi
+102,1,chaimae,mehdaoui,nope,01010101,cnope@gmail.com,chaimae,chaimae
+103,1,valentin,fevre,nope,01010101,vnope@gmail.com,valentin,valentin

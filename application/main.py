@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from app.setup_db import setup_db
 from app.routers import commandes, clients, articles, auth, commandes_client
 from app.models import *
-
+from app.database_connection import engine
 
 # Initialisation de l'application FastAPI et création de la base de données(sauf si existante)
 @asynccontextmanager

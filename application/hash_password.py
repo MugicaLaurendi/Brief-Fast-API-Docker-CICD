@@ -1,5 +1,6 @@
 from sqlmodel import select
-from app.models import Clients, get_session
+from app.models import Clients
+from app.database_connection import get_session
 from app.security import get_password_hash
 
 def hash_existing_passwords():
