@@ -3,7 +3,7 @@ env
 venv_mongo
 
 .venv
-.env
+*.env
 
 *.db
 database.db
