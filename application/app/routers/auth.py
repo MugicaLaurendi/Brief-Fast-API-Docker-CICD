@@ -4,6 +4,7 @@ from sqlmodel import Session, select
 from jose import JWTError, jwt
 
 from app.models import Clients, Roles
+from app.schemas import ClientCreate
 from app.database_connection import get_session
 from app.security import (
     verify_password,
@@ -73,8 +74,8 @@ async def refresh_token(request: Request, db: Session = Depends(get_session)):
 
 # Inscription client avec rôle "client" par défaut
 @router.post("/register")
-def register_client(client_data: dict, db: Session = Depends(get_session)):
-    existing = db.exec(select(Clients).where(Clients.username == client_data["username"])).first()
+def register_client(client_data: ClientCreate, db: Session = Depends(get_session)):
+    existing = db.exec(select(Clients).where(Clients.username == client_data.username)).first()
     if existing:
         raise HTTPException(status_code=400, detail="Nom d'utilisateur déjà utilisé")
 
@@ -82,8 +83,20 @@ def register_client(client_data: dict, db: Session = Depends(get_session)):
     if not role:
         raise HTTPException(status_code=500, detail="Rôle 'client' introuvable")
 
-    client_data["password"] = get_password_hash(client_data["password"])
-    client = Clients(**client_data, role_id=role.id)
+    # Hasher le mot de passe
+    hashed_password = get_password_hash(client_data.password)
+
+    # Créer l'objet client
+    client = Clients(
+        nom=client_data.nom,
+        prenom=client_data.prenom,
+        adresse=client_data.adresse,
+        telephone=client_data.telephone,
+        email=client_data.email,
+        username=client_data.username,
+        password=hashed_password,
+        role_id=role.id
+    )
     db.add(client)
     db.commit()
     db.refresh(client)
