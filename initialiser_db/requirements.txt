@@ -1,0 +1,10 @@
+fastapi
+fastapi[standard]
+sqlmodel
+pydantic
+python-jose
+passlib
+pylance
+pyjwt
+passlib[bcrypt]
+psycopg2

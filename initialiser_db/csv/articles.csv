@@ -1,0 +1,101 @@
+id,nom,prix,categorie,description,stock
+1,Café,5.25,Plat,"Accord six terrain français.",39
+2,Couscous,12.88,Dessert,"Rapporter espace humain race cou.",47
+3,Jus d’orange,13.74,Plat,"Donc dehors en moitié.",31
+4,Sushi,25.34,Boisson,Agir sous sous jambe arrière.,22
+5,Cheeseburger,21.33,Plat,Fauteuil disparaître accomplir goût.,33
+6,Mousse au chocolat,28.62,Dessert,Savoir interrompre centre couper.,11
+7,Soupe miso,17.25,Dessert,Remonter condamner pain auteur titre intéresser.,8
+8,Crêpe au sucre,9.72,Entrée,Blanc feu falloir.,34
+9,Tacos,20.56,Entrée,Compte pousser armer courage voiture espoir.,8
+10,Risotto,8.82,Plat,Marquer soudain vieux assez réveiller attacher.,41
+11,Poulet rôti,3.92,Plat,Amour fusil six.,42
+12,Poulet rôti,24.77,Plat,Place capable soirée.,26
+13,Couscous,24.08,Entrée,Source briller naturellement tâche songer conclure.,22
+14,Couscous,29.65,Dessert,Figure remplir deviner petit apprendre dieu auquel.,16
+15,Sushi,20.51,Entrée,Ou nature parti espèce usage.,13
+16,Pizza Margherita,12.03,Plat,Souvenir coup près lèvre aucun.,42
+17,Risotto,2.44,Dessert,Dame plaindre accorder depuis dire.,8
+18,Couscous,22.77,Entrée,Offrir avoir travail bois poche.,9
+19,Café,14.55,Dessert,Empêcher sérieux ne lui monde envelopper.,37
+20,Vin rouge,5.05,Plat,Énergie angoisse personne habitude savoir demain.,44
+21,Cheeseburger,22.36,Dessert,Espérer remplir voie prouver bouche dimanche.,34
+22,Pizza Margherita,3.7,Boisson,Former parvenir partie gris prévoir militaire rencontre vieux.,30
+23,Tiramisu,21.21,Boisson,Énorme quand neuf arme étranger.,50
+24,Mousse au chocolat,4.06,Entrée,Élever nombreux douleur silence bientôt on.,25
+25,Bière artisanale,6.15,Plat,Poète nature barbe portier quarante.,22
+26,Bière artisanale,19.73,Dessert,Propos échapper règle rue.,29
+27,Bière artisanale,16.86,Boisson,Armée voler neuf.,37
+28,Bière artisanale,14.05,Entrée,Fruit endormir contenir tête fenêtre.,46
+29,Jus d’orange,22.18,Plat,Conversation prêt contenir musique lieu réserver tout.,32
+30,Mousse au chocolat,26.87,Boisson,Sommeil continuer décider sortir arme être.,26
+31,Mousse au chocolat,13.16,Entrée,Chaise toujours étudier minute face révéler comment.,25
+32,Tiramisu,10.75,Dessert,Vue tandis que ramener.,28
+33,Couscous,21.23,Boisson,Davantage répéter muet.,9
+34,Tacos,25.29,Entrée,Voyager briser adresser descendre jaune.,32
+35,Sushi,22.85,Dessert,Cinq prononcer bien garçon auteur charge rocher avance.,13
+36,Jus d’orange,3.68,Dessert,Soumettre vrai joli branche voisin petit oublier parole.,47
+37,Sushi,13.5,Boisson,Plaire lumière trembler fumée sujet sûr.,8
+38,Salade César,18.81,Dessert,Avoir calmer enlever fidèle gros en.,11
+39,Vin rouge,16.21,Plat,Apprendre poursuivre partie propos figurer chef bonheur.,47
+40,Café,8.28,Entrée,Nul sens endroit impossible.,27
+41,Jus d’orange,12.29,Dessert,Étendre plaisir puissant ventre former combien.,41
+42,Boeuf Bourguignon,24.6,Entrée,Parfois doucement dimanche.,43
+43,Lasagnes,2.81,Dessert,Inconnu masse bon sombre spectacle blanc genou.,49
+44,Salade César,27.8,Dessert,Éloigner mêler changement billet blond.,5
+45,Pad Thai,26.36,Boisson,Impossible aile intérieur nerveux spectacle jambe conscience.,9
+46,Couscous,22.75,Entrée,Casser poète gagner dormir marché.,10
+47,Thé vert,8.02,Boisson,Fine presser suffire bande.,34
+48,Risotto,6.41,Dessert,Prévenir blanc réfléchir refuser source enfoncer paix.,25
+49,Vin rouge,18.69,Entrée,Soleil mal rire doute.,14
+50,Pad Thai,23.12,Entrée,Troisième voile exposer également exposer souhaiter que.,48
+51,Tacos,9.62,Boisson,Répandre répandre plaine précipiter.,36
+52,Bière artisanale,14.38,Dessert,Yeux pain rester ciel étendue sérieux.,18
+53,Thé vert,5.19,Boisson,Trop fille rencontrer envie froid tourner.,12
+54,Salade César,20.99,Boisson,Ajouter surveiller riche dame blond remonter.,38
+55,Salade César,3.27,Boisson,Serrer compte beau esprit humain.,43
+56,Cheeseburger,2.22,Dessert,Religion fleur assister quel immobile.,18
+57,Couscous,23.4,Dessert,Devoir dominer ainsi naturel.,25
+58,Sushi,2.22,Boisson,Il durer lieu comprendre.,16
+59,Couscous,12.65,Plat,Herbe avance tapis tranquille rejeter veiller toute engager.,37
+60,Jus d’orange,25.33,Dessert,Guerre interroger leur secours.,9
+61,Crêpe au sucre,26.13,Entrée,Histoire mer dès contre ce remercier réclamer.,32
+62,Pizza Margherita,14.87,Entrée,Heure de dix saisir menacer calme.,25
+63,Vin rouge,14.02,Boisson,Armée franc prince endroit pied considérer.,50
+64,Tiramisu,10.11,Boisson,Jeu croix coucher bataille par type.,6
+65,Risotto,6.81,Boisson,An barbe sien neuf intérieur.,49
+66,Soupe miso,4.47,Entrée,Succès gagner très avoir.,20
+67,Tiramisu,18.49,Entrée,Enfance sept donner demain aventure morceau.,30
+68,Salade César,22.88,Plat,Carte désirer finir religion avance fer car.,26
+69,Pad Thai,4.14,Entrée,Bien apporter monde prendre moi.,38
+70,Thé vert,7.43,Dessert,Épaule demain personnage prévoir anglais.,27
+71,Couscous,8.62,Plat,À silencieux bras quant à vision assez.,21
+72,Poulet rôti,6.86,Plat,Danger supérieur parler coup étendue mentir réflexion appeler.,46
+73,Tacos,6.96,Boisson,Savoir double journal bord traverser terre.,34
+74,Vin rouge,23.28,Boisson,Espèce rassurer combat.,48
+75,Vin rouge,20.0,Dessert,Emmener pendre offrir madame mille combat.,45
+76,Risotto,6.23,Entrée,Seul accomplir veiller cabinet dame pays animer.,35
+77,Mousse au chocolat,19.68,Dessert,Dehors retenir mille conduire simple saint chambre.,42
+78,Cheeseburger,11.85,Entrée,Ensuite officier nécessaire ailleurs.,24
+79,Mousse au chocolat,14.65,Entrée,Léger sentier encore mériter coin regard.,28
+80,Salade César,4.15,Entrée,Pendant prêt autour siège appeler visible second.,44
+81,Bière artisanale,16.2,Boisson,Chair rassurer appuyer.,42
+82,Jus d’orange,28.72,Entrée,Souhaiter réflexion ça grâce égal conclure paupière.,33
+83,Vin rouge,20.25,Dessert,Sac sortir pied éclater.,43
+84,Café,16.04,Entrée,Brûler parvenir acte intéresser attaquer toucher.,33
+85,Sushi,24.71,Dessert,Plein prononcer drôle course.,50
+86,Tacos,16.13,Plat,Garde reconnaître commun grandir naître solitude l'un.,7
+87,Boeuf Bourguignon,21.81,Boisson,Désirer image source complètement tuer lisser.,38
+88,Thé vert,19.07,Dessert,Tendre sommet donner quant à signifier.,28
+89,Salade César,12.85,Dessert,Goût fusil céder paysan.,48
+90,Bière artisanale,3.47,Dessert,Doigt quoi proposer pénétrer danger.,9
+91,Risotto,4.65,Boisson,Intérêt tache chemise pareil attirer âgé produire feu.,23
+92,Lasagnes,22.26,Plat,Circonstance servir preuve élever.,26
+93,Tacos,18.32,Plat,Est achever emmener rester fumée droit plein.,27
+94,Salade César,29.1,Boisson,Papier dehors cours vieillard travail connaître sourire frapper.,13
+95,Bière artisanale,21.85,Entrée,Personnage amuser plus souhaiter quelque dégager côte.,24
+96,Jus d’orange,12.55,Dessert,Mémoire beauté expliquer long parmi étroit.,13
+97,Thé vert,4.62,Boisson,Annoncer ombre matin bientôt moitié.,37
+98,Soupe miso,2.51,Dessert,Peu possible grave.,16
+99,Poulet rôti,11.57,Boisson,Rire semblable monsieur.,17
+100,Boeuf Bourguignon,30.0,Plat,Pluie printemps juste nommer.,9
