@@ -3,10 +3,10 @@ from pathlib import Path
 from sqlmodel import Session, insert
 from datetime import datetime
 
-from app.models import Roles, Status, Articles, Clients, Commandes, CommandesArticles
-from app.database_connection import engine, init_db
+from models import Roles, Status, Articles, Clients, Commandes, CommandesArticles
+from database_connection import engine, init_db
 
-CSV_DIR = Path(__file__).parent.parent / "csv"
+CSV_DIR = Path(__file__).parent / "csv"
 
 def load_csv(csv_name):
     path = CSV_DIR / csv_name
