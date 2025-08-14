@@ -1,5 +1,7 @@
 services:
+
   pgadmin:
+    container_name: pgadmin
     image: dpage/pgadmin4
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@example.com
@@ -21,6 +23,20 @@ services:
         DB_NAME: ${POSTGRES_DB}
     depends_on:
         - database
+
+  initialiser_db:
+    container_name: initialiser_db
+    build: ./initialiser_db/
+    ports:
+     - "2424:2424"
+    environment:
+        DB_HOST: database
+        DB_USER: ${POSTGRES_USER}
+        DB_PASS: ${POSTGRES_PASSWORD}
+        DB_NAME: ${POSTGRES_DB}
+    depends_on:
+          database:
+            condition: service_healthy
 
   database:
     container_name: database
