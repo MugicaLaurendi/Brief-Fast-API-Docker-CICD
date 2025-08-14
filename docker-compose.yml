@@ -9,12 +9,11 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      database:
-        condition: service_healthy
-
+      - database
   app:
     container_name: application
-    build: ./application/
+    build: 
+      context: ./application/
     ports:
      - "8000:8000"
     environment:
@@ -23,8 +22,7 @@ services:
         DB_PASS: ${POSTGRES_PASSWORD}
         DB_NAME: ${POSTGRES_DB}
     depends_on:
-          database:
-            condition: service_healthy
+        - database
 
   initialiser_db:
     container_name: initialiser_db
@@ -42,15 +40,18 @@ services:
 
   database:
     container_name: database
-    image: postgres
+    image: postgres:15
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
     volumes:
-        - /var/lib/postgresql/data
+        - db_data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 20
+
+volumes:
+  db_data:
