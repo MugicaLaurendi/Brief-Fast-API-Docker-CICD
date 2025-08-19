@@ -6,10 +6,10 @@ import datetime as dt
 from typing import List
 import json
 
-from app.models import Clients, Commandes, CommandesArticles, Articles
-from app.database_connection import get_session
-from app.schemas import CommandeWithArticlesNoIds
-from app.security import require_role
+from application.app.models import Clients, Commandes, CommandesArticles, Articles
+from application.app.database_connection import get_session
+from application.app.schemas import CommandeWithArticlesNoIds
+from application.app.security import require_role
 
 
 

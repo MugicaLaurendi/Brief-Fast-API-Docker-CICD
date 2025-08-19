@@ -2,8 +2,8 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 
-from app.models import Clients
-from app.database_connection import get_session
+from application.app.models import Clients
+from application.app.database_connection import get_session
 from sqlmodel import Session, select
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer

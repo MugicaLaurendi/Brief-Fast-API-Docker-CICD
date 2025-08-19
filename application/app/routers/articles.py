@@ -2,10 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import select, Session
 from typing import List
 
-from app.models import Articles
-from app.database_connection import get_session
-from app.schemas import ArticleCreate, ArticleRead, ArticleUpdate
-from app.security import require_role
+from application.app.models import Articles
+from application.app.database_connection import get_session
+from application.app.schemas import ArticleCreate, ArticleRead, ArticleUpdate
+from application.app.security import require_role
 
 
 
