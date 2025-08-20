@@ -1,7 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
 from sqlalchemy import join
-from datetime import date, datetime, time
 import datetime as dt
 from typing import List
 import json
@@ -39,7 +38,7 @@ def creer_commande_client(id_articles_et_quantites, current_user: Clients = Depe
         # checker si client existe
         statement = select(Clients).where(Clients.id == id_client)
         client = session.exec(statement).first()
-        if client == None :
+        if client is None :
             return {"error": "client does not exist"}
         
         # creer dans la table commandes une commande avec un prix a 0

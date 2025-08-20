@@ -235,7 +235,9 @@ def test_update_article_forbidden(client: TestClient, session):
 # ---------- TESTS DELETE ----------
 def test_delete_article_ok(client: TestClient, session):
     role_admin = session.get(Roles, 1) or Roles(id=1, nom="admin", permission="all")
-    session.add(role_admin); session.commit(); session.refresh(role_admin)
+    session.add(role_admin)
+    session.commit()
+    session.refresh(role_admin)
 
     admin_user = create_user(session, "deladmin", role_id=1)
     app.dependency_overrides[get_current_user] = lambda: admin_user
@@ -247,7 +249,9 @@ def test_delete_article_ok(client: TestClient, session):
             description="Tablette de chocolat noir", 
             stock=10
     )
-    session.add(art); session.commit(); session.refresh(art)
+    session.add(art)
+    session.commit()
+    session.refresh(art)
 
     resp = client.delete(f"/articles/{art.id}")
     assert resp.status_code == 204

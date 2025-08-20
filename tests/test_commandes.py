@@ -1,9 +1,6 @@
-from main import app
-from sqlmodel import select, Session
+from sqlmodel import select
 from app.models import Articles
-from app.security import get_password_hash
 from fastapi.testclient import TestClient
-from app.routers.clients import get_current_user
 import json
 
 
