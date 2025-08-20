@@ -66,6 +66,11 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
         for id_article, quantite in id_articles_et_quantites.items() :
 
             statement = select(Articles).where(Articles.id == id_article)
+            is_article = session.exec(statement).first()
+            
+            if is_article == None :
+                return {"error": "product does not exist"}
+
             article = session.exec(statement).first()
             prix_articles = article.prix * quantite
             prix_commande_article.append(prix_articles)
