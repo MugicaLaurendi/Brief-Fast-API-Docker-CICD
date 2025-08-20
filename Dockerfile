@@ -24,7 +24,7 @@ RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r /application/requirements.txt
 
 
-COPY --chown=appuser:appuser . .''
+COPY --chown=appuser:appuser . .
 
 # Passer à l'utilisateur non-root
 USER appuser
