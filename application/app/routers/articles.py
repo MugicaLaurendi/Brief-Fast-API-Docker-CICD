@@ -51,7 +51,9 @@ def update_article(article_id: int, article: ArticleCreate, db: Session = Depend
         raise HTTPException(status_code=404, detail="Article non trouvé")
     for k, v in article.model_dump().items():
         setattr(item, k, v)
-    db.add(item); db.commit(); db.refresh(item)
+    db.add(item)
+    db.commit() 
+    db.refresh(item)
     return item
 
 
@@ -64,7 +66,9 @@ def patch_article(article_id: int, article: ArticleUpdate, db: Session = Depends
     update_data = article.model_dump(exclude_none=True)
     for k, v in update_data.items():
         setattr(item, k, v)
-    db.add(item); db.commit(); db.refresh(item)
+    db.add(item)
+    db.commit()
+    db.refresh(item)
     return item
 
 

@@ -1,11 +1,9 @@
 from setup_db import setup_db
 from hash_password import hash_existing_passwords
-from database_connection import get_session, init_db, engine
-from sqlmodel import SQLModel, Session
+from database_connection import engine
+from sqlmodel import Session
 from sqlalchemy import inspect
 
-# init_db
-# session = get_session
 
 def is_database_empty(session: Session) -> bool:
 
@@ -16,7 +14,8 @@ def is_database_empty(session: Session) -> bool:
     
     if not table_names :
         return True
-    else : False
+    else : 
+        False
 
 
 

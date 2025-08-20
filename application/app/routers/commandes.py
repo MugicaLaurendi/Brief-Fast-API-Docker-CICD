@@ -38,7 +38,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
         # checker si client existe
         statement = select(Clients).where(Clients.id == id_client)
         client = session.exec(statement).first()
-        if client == None :
+        if client is None :
             return {"error": "client does not exist"}
         
         # creer dans la table commandes une commande avec un prix a 0
@@ -68,7 +68,7 @@ def creer_commande(id_client, id_articles_et_quantites, db: Session = Depends(ge
             statement = select(Articles).where(Articles.id == id_article)
             is_article = session.exec(statement).first()
             
-            if is_article == None :
+            if is_article is None :
                 return {"error": "product does not exist"}
 
             article = session.exec(statement).first()
