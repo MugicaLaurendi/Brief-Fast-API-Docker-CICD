@@ -28,21 +28,21 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
-      - name: Set up Docker Compose
+      - name: Install docker-compose
         run: |
-          sudo curl -L "https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          sudo chmod +x /usr/local/bin/docker-compose
-          docker-compose version
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
 
       # Now run docker-compose commands
       - name: Run tests with Docker Compose
-        run: docker-compose up -d
-
+        run: docker compose -f docker-compose_test.yml up -d
+          
     #name: Run tests inside container
       #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
 
       - name: Run tests with pytest
-        run: pytest --junitxml=pytest-report-${{ matrix.python-version }}.xml
+        run: pytest tests/
+
 
       # Optionnel: Sauvegarder le rapport de test
       - name: Upload pytest test results
@@ -57,5 +57,5 @@ jobs:
 
       - name: Stop services
         if: always()
-        run: docker-compose down
+        run: docker compose -f docker-compose_test.yml down -v
 
