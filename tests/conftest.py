@@ -1,3 +1,10 @@
+# tests/conftest.py
+import os
+
+# setdefault évite d’écraser si déjà fourni par GA
+os.environ.setdefault("SECRET_KEY", "test-secret")
+os.environ.setdefault("ALGORITHM", "HS256")
+
 import pytest
 from sqlmodel import SQLModel, create_engine, Session, select
 from fastapi.testclient import TestClient
@@ -9,12 +16,6 @@ from app.models import Clients, Roles
 # Créer une base de données SQLite en mémoire pour les tests
 TEST_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
-
-
-@pytest.fixture(autouse=True)  # <-- scope par défaut = "function"
-def _test_env(monkeypatch):
-    monkeypatch.setenv("SECRET_KEY", "test-secret")
-    monkeypatch.setenv("ALGORITHM", "HS256")
 
 
 # Fixture pour initialiser la DB avant chaque test
