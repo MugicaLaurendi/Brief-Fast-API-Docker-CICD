@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from application.app.routers import commandes, clients, articles, auth, commandes_client
-from application.app.models import *
+from app.routers import commandes, clients, articles, auth, commandes_client
+from app.models import *
 
 
 app = FastAPI()

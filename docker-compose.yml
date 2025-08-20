@@ -13,7 +13,7 @@ services:
   app:
     container_name: application
     build: 
-      context: ./application/
+      context: ./application
     ports:
      - "8000:8000"
     environment:
