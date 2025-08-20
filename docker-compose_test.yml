@@ -12,7 +12,10 @@ services:
         DB_PASS: password
         DB_NAME: postgres
     depends_on:
-        - database
+      database:
+        condition: service_healthy
+      init_db:
+        condition: service_completed_successfully
 
   initialiser_db:
     container_name: initialiser_db

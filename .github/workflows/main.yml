@@ -35,16 +35,14 @@ jobs:
 
       # Now run docker-compose commands
       - name: Run tests with Docker Compose
-        run: |
-          docker-compose -f docker-compose_test.yml up -d
-          echo "Waiting for services to be ready..."
-          sleep 20
+        run: docker compose -f docker-compose_test.yml up -d
           
     #name: Run tests inside container
       #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
 
       - name: Run tests with pytest
-        run: pytest --junitxml=pytest-report-${{ matrix.python-version }}.xml
+        run: docker compose -f docker-compose_test.yml exec -T app pytest -q --maxfail=1 --disable-warnings
+
 
       # Optionnel: Sauvegarder le rapport de test
       - name: Upload pytest test results
@@ -59,5 +57,5 @@ jobs:
 
       - name: Stop services
         if: always()
-        run: docker-compose -f docker-compose_test.yml down
+        run: docker compose -f docker-compose_test.yml down -v
 
