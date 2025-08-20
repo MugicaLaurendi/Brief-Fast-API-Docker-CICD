@@ -18,9 +18,9 @@ services:
      - "8000:8000"
     environment:
         DB_HOST: database
-        DB_USER: ${POSTGRES_USER}
-        DB_PASS: ${POSTGRES_PASSWORD}
-        DB_NAME: ${POSTGRES_DB}
+        DB_USER: admin
+        DB_PASS: admin
+        DB_NAME: database
     depends_on:
         - database
 
@@ -31,9 +31,9 @@ services:
      - "2424:2424"
     environment:
         DB_HOST: database
-        DB_USER: ${POSTGRES_USER}
-        DB_PASS: ${POSTGRES_PASSWORD}
-        DB_NAME: ${POSTGRES_DB}
+        DB_USER: admin
+        DB_PASS: admin
+        DB_NAME: database
     depends_on:
           database:
             condition: service_healthy
@@ -42,13 +42,13 @@ services:
     container_name: database
     image: postgres:15
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: database
     volumes:
         - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U admin -d database"]
       interval: 5s
       timeout: 3s
       retries: 20
