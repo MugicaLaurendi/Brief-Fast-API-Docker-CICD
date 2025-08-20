@@ -8,4 +8,6 @@ pylance
 pyjwt
 passlib[bcrypt]
 psycopg2
+pytest
+requests
 

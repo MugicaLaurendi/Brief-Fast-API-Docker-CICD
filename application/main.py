@@ -1,22 +1,9 @@
 from fastapi import FastAPI
-import os
-from contextlib import asynccontextmanager
 
-from app.routers import commandes, clients, articles, auth, commandes_client
-from hash_password import hash_existing_passwords
-from app.models import *
-from app.database_connection import engine
+from application.app.routers import commandes, clients, articles, auth, commandes_client
+from application.app.models import *
 
-# Initialisation de l'application FastAPI et création de la base de données(sauf si existante)
-# @asynccontextmanager
-# async def lifespan(app: FastAPI):
-#     if os.getenv("ENV", "local") == "local" and not os.path.exists("database.db"):
-#         setup_db()
-#         hash_existing_passwords()
-#     yield
-#     engine.dispose()
 
-#app = FastAPI(lifespan=lifespan)
 app = FastAPI()
 
 app.include_router(auth.router)
