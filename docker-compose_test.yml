@@ -1,4 +1,5 @@
 services:
+
   app:
     container_name: application
     build: 
@@ -7,9 +8,9 @@ services:
      - "8000:8000"
     environment:
         DB_HOST: database
-        DB_USER: test
-        DB_PASS: test
-        DB_NAME: test_db
+        DB_USER: postgres
+        DB_PASS: password
+        DB_NAME: postgres
     depends_on:
         - database
 
@@ -20,9 +21,9 @@ services:
      - "2424:2424"
     environment:
         DB_HOST: database
-        DB_USER: test
-        DB_PASS: test
-        DB_NAME: test_db
+        DB_USER: postgres
+        DB_PASS: password
+        DB_NAME: postgres
     depends_on:
           database:
             condition: service_healthy
@@ -31,13 +32,13 @@ services:
     container_name: database
     image: postgres:15
     environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
     volumes:
         - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test -d test_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
       interval: 5s
       timeout: 3s
       retries: 20
