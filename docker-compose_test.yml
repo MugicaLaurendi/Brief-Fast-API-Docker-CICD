@@ -1,38 +1,57 @@
-version: "3.9"
-
 services:
-  test_database:
-    image: postgres:15
-    container_name: test_database
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
     environment:
-      POSTGRES_USER: test_user
-      POSTGRES_PASSWORD: test_password
-      POSTGRES_DB: test_db
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: secret
     ports:
-      - "5433:5432"
+      - "5050:80"
+    depends_on:
+      - database
+  app:
+    container_name: application
+    build: 
+      context: ./application
+    ports:
+     - "8000:8000"
+    environment:
+        DB_HOST: database
+        DB_USER: test
+        DB_PASS: test
+        DB_NAME: test_db
+    depends_on:
+        - database
+
+  initialiser_db:
+    container_name: initialiser_db
+    build: ./initialiser_db/
+    ports:
+     - "2424:2424"
+    environment:
+        DB_HOST: database
+        DB_USER: test
+        DB_PASS: test
+        DB_NAME: test_db
+    depends_on:
+          database:
+            condition: service_healthy
+
+  database:
+    container_name: database
+    image: postgres:15
+    environment:
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
     volumes:
-      - test_db_data:/var/lib/postgresql/data
+        - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U test_user -d test_db"]
+      test: ["CMD-SHELL", "pg_isready -U test -d test_db"]
       interval: 5s
       timeout: 3s
       retries: 20
 
-  app:
-    build: 
-      context: ./application/
-    container_name: app_test
-    environment:
-      DB_HOST: test_database
-      DB_USER: test_user
-      DB_PASS: test_password
-      DB_NAME: test_db
-    depends_on:
-      test_database:
-        condition: service_healthy
-    ports:
-      - "8001:8000"  
-
 volumes:
-  test_db_data:
-
+  db_data:
