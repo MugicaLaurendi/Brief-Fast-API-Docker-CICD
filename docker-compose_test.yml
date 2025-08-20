@@ -16,7 +16,7 @@ services:
 
   initialiser_db:
     container_name: initialiser_db
-    build: ./initialiser_db/
+    build: ./initialiser_db
     ports:
      - "2424:2424"
     environment:
