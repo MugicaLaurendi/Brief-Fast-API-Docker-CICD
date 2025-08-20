@@ -36,7 +36,7 @@ jobs:
       # Now run docker-compose commands
       - name: Run tests with Docker Compose
         run: |
-          docker-compose -f docker-compose_test.yml up
+          docker-compose -f docker-compose_test.yml up -d
           echo "Waiting for services to be ready..."
           sleep 20
           
