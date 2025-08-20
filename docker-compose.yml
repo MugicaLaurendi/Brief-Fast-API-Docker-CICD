@@ -34,6 +34,9 @@ services:
         DB_USER: ${POSTGRES_USER}
         DB_PASS: ${POSTGRES_PASSWORD}
         DB_NAME: ${POSTGRES_DB}
+    depends_on:
+          database:
+            condition: service_healthy
 
   database:
     container_name: database
