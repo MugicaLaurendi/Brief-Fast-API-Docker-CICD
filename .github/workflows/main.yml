@@ -41,7 +41,11 @@ jobs:
       #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
 
       - name: Run tests with pytest
-        run: docker compose -f docker-compose_test.yml exec -T app pytest -q --maxfail=1 --disable-warnings
+        run: |
+          docker compose -f docker-compose_test.yml exec -T \
+            -w /workspace app \
+            pytest tests/ -q --maxfail=1 --disable-warnings \
+            -c /workspace/pytest.ini
 
 
       # Optionnel: Sauvegarder le rapport de test
