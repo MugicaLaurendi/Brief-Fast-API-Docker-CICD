@@ -127,8 +127,8 @@ def test_update_client_self(auth_client: TestClient, session):
 
 def test_update_client_forbidden(client: TestClient, session):
    
-    user1 = create_user(session, "userA")
-    user2 = create_user(session, "userB")
+    user1 = create_user(session, "userA", role_id=3)
+    user2 = create_user(session, "userB", role_id=3)
 
     app.dependency_overrides[get_current_user] = lambda: user1
 
