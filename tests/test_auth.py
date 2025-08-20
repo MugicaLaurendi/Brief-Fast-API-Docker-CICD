@@ -1,4 +1,4 @@
-from application.app.security import create_refresh_token
+from app.security import create_refresh_token
 from tests.test_clients import create_user
 from uuid import uuid4
 

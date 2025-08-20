@@ -1,9 +1,9 @@
-from application.main import app
+from main import app
 from sqlmodel import select, Session
-from application.app.models import Clients, Roles
-from application.app.security import get_password_hash
+from app.models import Clients, Roles
+from app.security import get_password_hash
 from fastapi.testclient import TestClient
-from application.app.routers.clients import get_current_user
+from app.routers.clients import get_current_user
 
 # ---------- HELPERS ----------
 def create_user(session, username, role_id=1, email=None):
