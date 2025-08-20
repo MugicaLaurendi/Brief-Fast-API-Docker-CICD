@@ -14,7 +14,7 @@ services:
     depends_on:
       database:
         condition: service_healthy
-      init_db:
+      initialiser_db:
         condition: service_completed_successfully
 
   initialiser_db:
