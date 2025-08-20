@@ -1,7 +1,7 @@
 import pytest
 from sqlmodel import SQLModel, create_engine, Session, select
 from fastapi.testclient import TestClient
-from application.main import app
+from main import app
 from app.database_connection import get_session
 from app.security import get_password_hash
 from app.models import Clients, Roles
