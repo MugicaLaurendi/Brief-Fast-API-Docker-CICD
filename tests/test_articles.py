@@ -24,6 +24,7 @@ def create_user(session, username, role_id=1, email=None):
     session.refresh(user)
     return user
 
+
 # ---------- TESTS CREATION ----------
 def test_create_article_ok(auth_client: TestClient, session):
     # S'assurer que le rôle "admin" existe (et récupérer son id)
@@ -114,7 +115,6 @@ def test_read_articles_list(auth_client: TestClient, session):
     body = response.json()
     assert isinstance(body, list)
     assert len(body) >= 2
-
 
 
 def test_read_articles_forbidden(session):
@@ -231,6 +231,7 @@ def test_update_article_forbidden(client: TestClient, session):
     # Cleanup
     app.dependency_overrides.clear()
 
+
 # ---------- TESTS DELETE ----------
 def test_delete_article_ok(client: TestClient, session):
     role_admin = session.get(Roles, 1) or Roles(id=1, nom="admin", permission="all")
@@ -239,8 +240,13 @@ def test_delete_article_ok(client: TestClient, session):
     admin_user = create_user(session, "deladmin", role_id=1)
     app.dependency_overrides[get_current_user] = lambda: admin_user
 
-    art = Articles(nom="Chocolat", prix=2.50, categorie="Dessert",
-                   description="Tablette de chocolat noir", stock=10)
+    art = Articles(
+            nom="Chocolat", 
+            prix=2.50, 
+            categorie="Dessert",
+            description="Tablette de chocolat noir", 
+            stock=10
+    )
     session.add(art); session.commit(); session.refresh(art)
 
     resp = client.delete(f"/articles/{art.id}")
@@ -250,6 +256,7 @@ def test_delete_article_ok(client: TestClient, session):
     assert session.get(Articles, art.id) is None
 
     app.dependency_overrides.clear()
+
 
 def test_delete_article_forbidden(client: TestClient, session: Session):
     # Créer un rôle "guest" (non autorisé à delete)
