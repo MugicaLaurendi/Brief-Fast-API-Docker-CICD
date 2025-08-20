@@ -17,14 +17,14 @@ WORKDIR /application
 
 
 # Copier uniquement le fichier requirements
-COPY --chown=appuser:appuser ./requirements.txt /application/requirements.txt
+COPY --chown=appuser:appuser ./application/requirements.txt /application/requirements.txt
 
 # Installer les dépendances sans cache
 RUN pip install --no-cache-dir --upgrade pip
 RUN pip install --no-cache-dir -r /application/requirements.txt
 
 
-COPY --chown=appuser:appuser . .
+COPY --chown=appuser:appuser . .''
 
 # Passer à l'utilisateur non-root
 USER appuser
