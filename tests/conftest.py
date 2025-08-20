@@ -11,7 +11,7 @@ TEST_DATABASE_URL = "sqlite:///./test.db"
 engine = create_engine(TEST_DATABASE_URL, connect_args={"check_same_thread": False})
 
 
-@pytest.fixture(autouse=True, scope="session")
+@pytest.fixture(autouse=True)  # <-- scope par défaut = "function"
 def _test_env(monkeypatch):
     monkeypatch.setenv("SECRET_KEY", "test-secret")
     monkeypatch.setenv("ALGORITHM", "HS256")
