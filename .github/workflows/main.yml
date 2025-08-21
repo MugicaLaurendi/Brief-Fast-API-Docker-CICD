@@ -19,11 +19,10 @@ jobs:
       - run: pip install ruff
       - run: ruff check .
 
+
   test:
     runs-on: ubuntu-latest
-
-    steps:
-    
+    steps:  
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -37,37 +36,89 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r application/requirements.txt
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        
-      - name: Install docker-compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
-      # Now run docker-compose commands
-      - name: Run tests with Docker Compose
-        run: docker compose -f docker-compose_test.yml up -d
-          
-    #name: Run tests inside container
-      #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
-
       - name: Run tests with pytest
-        run: pytest tests/
+        run: pytest tests/ --junit-xml=pytest-report-${{ matrix.python-version }}.xml
 
-
-      # Optionnel: Sauvegarder le rapport de test
       - name: Upload pytest test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-reports-${{ matrix.python-version }}
           path: pytest-report-${{ matrix.python-version }}.xml
-        # 'if: always()' garantit que cette étape s'exécute même si les tests échouent,
-        # pour que vous puissiez toujours récupérer le rapport.
-        if: always()
+        
 
+  build_and_push:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: docker/setup-buildx-action@v3
+      # (optionnel) force Compose v2 si tu veux
+      # - uses: docker/setup-compose-action@v1
+
+      # 1) Env-file éphémère + sanity check de substitution
+      - name: Write CI env file for Compose
+        run: |
+          cat <<EOF > ci.env
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          EOF
+          docker compose --env-file ci.env -f docker-compose.yml config >/dev/null
+
+      # 2) DRY: même flags pour toutes les commandes compose
+      - name: Define COMPOSE_FLAGS
+        run: echo "COMPOSE_FLAGS=--env-file ci.env -f docker-compose.yml" >> $GITHUB_ENV
+
+      # 3) Up (attend les healthchecks si ton compose en a)
+      - name: Run Docker Compose
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml up -d --wait
+
+      - name: Compose ps
+        if: always()
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml ps
+
+      - name: DB logs
+        if: always()
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml logs --no-color --timestamps database
+
+      - name: Dump DB health
+        if: always()
+        run: |
+          CID=$(docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml ps -q database)
+          [ -n "$CID" ] && docker inspect "$CID" --format '{{json .State}}' | jq .
+
+      # 4) GHCR login + build & push
+      - name: Compute lowercase image tag
+        run: |
+          REPO_LC="${GITHUB_REPOSITORY,,}"
+          echo "IMAGE=ghcr.io/${REPO_LC}:latest" >> $GITHUB_ENV
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push
+        uses: docker/build-push-action@v6
+        with:
+          context: application
+          file: application/Dockerfile
+          tags: ${{ env.IMAGE }}
+          push: true
 
       - name: Stop services
         if: always()
-        run: docker compose -f docker-compose_test.yml down -v
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml down -v
+
+
 
