@@ -19,11 +19,10 @@ jobs:
       - run: pip install ruff
       - run: ruff check .
 
+
   test:
     runs-on: ubuntu-latest
-
-    steps:
-    
+    steps:  
       - name: Checkout code
         uses: actions/checkout@v4
 
@@ -37,36 +36,37 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r application/requirements.txt
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-        
-      # - name: Install docker-compose
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y docker-compose
-
-      # # Now run docker-compose commands
-      # - name: Run tests with Docker Compose
-      #   run: docker compose -f docker-compose_test.yml up -d
-          
-    #name: Run tests inside container
-      #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
-
       - name: Run tests with pytest
         run: pytest tests/
-
-
-      # Optionnel: Sauvegarder le rapport de test
+      
       - name: Upload pytest test results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: pytest-reports-${{ matrix.python-version }}
           path: pytest-report-${{ matrix.python-version }}.xml
-        # 'if: always()' garantit que cette étape s'exécute même si les tests échouent,
-        # pour que vous puissiez toujours récupérer le rapport.
-        if: always()
+        
+
+  build:
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        
+      - name: Install docker-compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
+      - name: Run tests with Docker Compose
+        run: docker compose -f docker-compose_test.yml up -d
 
 
+  push:
+      - name: Push Docker images
+        run: |
+          docker compose -f docker-compose_test.yml push
+
+
+  stop:
       - name: Stop services
         if: always()
         run: docker compose -f docker-compose_test.yml down -v
