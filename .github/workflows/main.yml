@@ -54,6 +54,14 @@ jobs:
       contents: read
       packages: write
     steps:
+      - run: |
+          cat <<EOF > .env.github
+          DB_HOST=database
+          DB_USER=${{ secrets.POSTGRES_USER }}
+          DB_PASS=${{ secrets.POSTGRES_PASSWORD }}
+          DB_NAME=${{ secrets.POSTGRES_DB }}
+          EOF
+          
       - name: Checkout code
         uses: actions/checkout@v4
 
