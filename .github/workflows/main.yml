@@ -54,13 +54,10 @@ jobs:
       contents: read
       packages: write
     env:
-      - run: |
-          cat <<EOF > .env.github
-          DB_HOST=database
-          DB_USER=${{ secrets.POSTGRES_USER }}
-          DB_PASS=${{ secrets.POSTGRES_PASSWORD }}
-          DB_NAME=${{ secrets.POSTGRES_DB }}
-          EOF
+      DB_HOST: database
+      DB_USER: ${{ secrets.POSTGRES_USER }}
+      DB_PASS: ${{ secrets.POSTGRES_PASSWORD }}
+      DB_NAME: ${{ secrets.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
