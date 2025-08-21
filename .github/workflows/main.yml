@@ -75,27 +75,29 @@ jobs:
           pwd
           ls -la
           ls -la application || true
-          
+
       - name: Run Docker Compose
         run: docker compose -f docker-compose_test.yml up -d
       
-      - name: Compute lowercase image path
+      - name: Compute lowercase image tag
         run: |
-          REPO_LC="${GITHUB_REPOSITORY,,}"     # owner/repo -> minuscules
-          echo "IMAGE=ghcr.io/${REPO_LC}" >> $GITHUB_ENV
+          REPO_LC="${GITHUB_REPOSITORY,,}"             # -> owner/repo en minuscules
+          echo "IMAGE=ghcr.io/${REPO_LC}:latest" >> $GITHUB_ENV
 
-      - uses: docker/login-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build & Push (Dockerfile dans application/, contexte application/)
+      - name: Build & Push
         uses: docker/build-push-action@v6
         with:
-          context: application
-          file: application/Dockerfile
-          tags: ghcr.io/${{ github.repository_owner }}/brief-fast-api-docker-cicd:latest
+          context: application         
+          file: application/Dockerfile   
+          tags: ${{ env.IMAGE }}
           push: true
 
   stop:
