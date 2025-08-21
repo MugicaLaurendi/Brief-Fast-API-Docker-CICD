@@ -47,7 +47,7 @@ jobs:
           path: pytest-report-${{ matrix.python-version }}.xml
         
 
-  build & push:
+  build_&_push:
     runs-on: ubuntu-latest
     needs: [lint, test]
     steps:
