@@ -57,7 +57,14 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+    
     steps:
+      - name: Ensure Postgres env vars are set
+        run: |
+          test -n "${{ secrets.POSTGRES_USER }}" || { echo "POSTGRES_USER is empty"; exit 1; }
+          test -n "${{ secrets.POSTGRES_PASSWORD }}" || { echo "POSTGRES_PASSWORD is empty"; exit 1; }
+          test -n "${{ secrets.POSTGRES_DB }}" || { echo "POSTGRES_DB is empty"; exit 1; }
+          
       - name: Checkout code
         uses: actions/checkout@v4
 
