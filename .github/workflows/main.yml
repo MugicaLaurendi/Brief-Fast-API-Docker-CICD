@@ -79,20 +79,20 @@ jobs:
 
       # 3) Up (attend les healthchecks si ton compose en a)
       - name: Run Docker Compose
-        run: docker compose ${{ env.COMPOSE_FLAGS }} up -d --wait
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml up -d --wait
 
       - name: Compose ps
         if: always()
-        run: docker compose ${{ env.COMPOSE_FLAGS }} ps
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml ps
 
       - name: DB logs
         if: always()
-        run: docker compose ${{ env.COMPOSE_FLAGS }} logs --no-color --timestamps database
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml logs --no-color --timestamps database
 
       - name: Dump DB health
         if: always()
         run: |
-          CID=$(docker compose ${{ env.COMPOSE_FLAGS }} ps -q database)
+          CID=$(docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml ps -q database)
           [ -n "$CID" ] && docker inspect "$CID" --format '{{json .State}}' | jq .
 
       # 4) GHCR login + build & push
@@ -118,7 +118,7 @@ jobs:
 
       - name: Stop services
         if: always()
-        run: docker compose ${{ env.COMPOSE_FLAGS }} down -v
+        run: docker compose ${{ env.COMPOSE_FLAGS }} -f docker-compose_test.yml down -v
 
 
 
