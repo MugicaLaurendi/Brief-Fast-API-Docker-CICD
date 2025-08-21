@@ -70,6 +70,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
+      - name: Debug paths
+        run: |
+          pwd
+          ls -la
+          ls -la application || true
+          
       - name: Run Docker Compose
         run: docker compose -f docker-compose_test.yml up -d
       
@@ -84,13 +90,13 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v6
+      - name: Build & Push (Dockerfile dans application/, contexte application/)
+        uses: docker/build-push-action@v6
         with:
-          context: .
-          file: Dockerfile
-          tags: ${{ env.IMAGE }}:latest
+          context: application
+          file: application/Dockerfile
+          tags: ghcr.io/${{ github.repository_owner }}/brief-fast-api-docker-cicd:latest
           push: true
-
 
   stop:
     runs-on: ubuntu-latest
