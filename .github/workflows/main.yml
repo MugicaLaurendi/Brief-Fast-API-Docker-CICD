@@ -53,56 +53,53 @@ jobs:
     permissions:
       contents: read
       packages: write
-    env:
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
-    
-    steps:
-      - name: Ensure Postgres env vars are set
-        run: |
-          test -n "${{ secrets.POSTGRES_USER }}" || { echo "POSTGRES_USER is empty"; exit 1; }
-          test -n "${{ secrets.POSTGRES_PASSWORD }}" || { echo "POSTGRES_PASSWORD is empty"; exit 1; }
-          test -n "${{ secrets.POSTGRES_DB }}" || { echo "POSTGRES_DB is empty"; exit 1; }
-          
-      - name: Checkout code
-        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-    
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        
-      - name: Install docker-compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+      - uses: docker/setup-buildx-action@v3
+      # (optionnel) force Compose v2 si tu veux
+      # - uses: docker/setup-compose-action@v1
 
+      # 1) Env-file éphémère + sanity check de substitution
+      - name: Write CI env file for Compose
+        run: |
+          cat <<EOF > ci.env
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          EOF
+          docker compose --env-file ci.env -f docker-compose.yml config >/dev/null
+
+      # 2) DRY: même flags pour toutes les commandes compose
+      - name: Define COMPOSE_FLAGS
+        run: echo "COMPOSE_FLAGS=--env-file ci.env -f docker-compose.yml" >> $GITHUB_ENV
+
+      # 3) Up (attend les healthchecks si ton compose en a)
       - name: Run Docker Compose
-        run: docker compose -f docker-compose.yml up -d --wait
+        run: docker compose ${{ env.COMPOSE_FLAGS }} up -d --wait
 
       - name: Compose ps
         if: always()
-        run: docker compose -f docker-compose.yml ps
+        run: docker compose ${{ env.COMPOSE_FLAGS }} ps
 
       - name: DB logs
         if: always()
-        run: docker compose -f docker-compose.yml logs --no-color --timestamps database
+        run: docker compose ${{ env.COMPOSE_FLAGS }} logs --no-color --timestamps database
 
-      - name: Dump failing container inspect (health)
+      - name: Dump DB health
         if: always()
         run: |
-          CID=$(docker compose -f docker-compose.yml ps -q database)
+          CID=$(docker compose ${{ env.COMPOSE_FLAGS }} ps -q database)
           [ -n "$CID" ] && docker inspect "$CID" --format '{{json .State}}' | jq .
 
+      # 4) GHCR login + build & push
       - name: Compute lowercase image tag
         run: |
-          REPO_LC="${GITHUB_REPOSITORY,,}"      
+          REPO_LC="${GITHUB_REPOSITORY,,}"
           echo "IMAGE=ghcr.io/${REPO_LC}:latest" >> $GITHUB_ENV
-
 
       - name: Login to GHCR
         uses: docker/login-action@v3
@@ -114,12 +111,14 @@ jobs:
       - name: Build & Push
         uses: docker/build-push-action@v6
         with:
-          context: application         
-          file: application/Dockerfile   
+          context: application
+          file: application/Dockerfile
           tags: ${{ env.IMAGE }}
           push: true
 
       - name: Stop services
-        run: docker compose -f docker-compose.yml down -v
+        if: always()
+        run: docker compose ${{ env.COMPOSE_FLAGS }} down -v
+
 
 
