@@ -53,10 +53,6 @@ jobs:
     permissions:
       contents: read
       packages: write
-    env:                              # <-- ICI (job-level)
-      POSTGRES_USER:     ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_DB:       ${{ secrets.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -74,11 +70,15 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Run Docker Compose (wait for healthchecks)
-        env:
-          POSTGRES_USER:     ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB:       ${{ secrets.POSTGRES_DB }}
+      - name: Write .env for Compose (ephemeral)
+        run: |
+          cat <<EOF > .env
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          EOF
+
+      - name: Run Docker Compose
         run: docker compose -f docker-compose.yml up -d --wait
 
       - name: Compose ps
