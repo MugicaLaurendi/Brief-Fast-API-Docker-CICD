@@ -77,6 +77,8 @@ jobs:
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           EOF
+          # Sanity check: résout la config effective (échoue si une var manque)
+          docker compose --env-file ci.env -f docker-compose.yml config >/dev/null
 
       - name: Run Docker Compose
         run: docker compose --env-file ci.env -f docker-compose.yml up -d --wait
