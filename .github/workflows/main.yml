@@ -48,6 +48,8 @@ jobs:
         
 
   build:
+    runs-on: ubuntu-latest
+    steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
@@ -61,12 +63,16 @@ jobs:
 
 
   push:
+    runs-on: ubuntu-latest
+    steps:
       - name: Push Docker images
         run: |
           docker compose -f docker-compose_test.yml push
 
 
   stop:
+    runs-on: ubuntu-latest
+    steps:
       - name: Stop services
         if: always()
         run: docker compose -f docker-compose_test.yml down -v
