@@ -70,13 +70,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Run Docker Compose
+      - name: Run Docker Compose (wait for healthchecks)
         env:
           POSTGRES_USER:     ${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB:       ${{ secrets.POSTGRES_DB }}
-        run: docker compose -f docker-compose.yml up -d
-        if: always()
+        run: docker compose -f docker-compose.yml up -d --wait
 
       - name: Compose ps
         if: always()

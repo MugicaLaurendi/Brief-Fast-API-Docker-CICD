@@ -22,7 +22,8 @@ services:
         DB_PASS: ${POSTGRES_PASSWORD}
         DB_NAME: ${POSTGRES_DB}
     depends_on:
-        - database
+      database:
+        condition: service_healthy
 
   initialiser_db:
     container_name: initialiser_db
@@ -48,10 +49,11 @@ services:
     volumes:
         - db_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
-      timeout: 3s
+      timeout: 5s
       retries: 20
+      start_period: 10s
 
 volumes:
   db_data:
