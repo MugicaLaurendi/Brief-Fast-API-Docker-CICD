@@ -75,15 +75,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Debug paths
-        run: |
-          pwd
-          ls -la
-          ls -la application || true
-
       - name: Run Docker Compose
         run: docker compose -f docker-compose.yml up -d
-      
+        if: always()
+        
+      - name: Compose ps
+        if: always()
+        run: docker compose -f docker-compose_test.yml ps
+
+      - name: DB logs
+        if: always()
+        run: docker compose -f docker-compose_test.yml logs --no-color --timestamps database
+
+      - name: Dump failing container inspect (health)
+        if: always()
+        run: |
+          CID=$(docker compose -f docker-compose_test.yml ps -q database)
+          [ -n "$CID" ] && docker inspect "$CID" --format '{{json .State}}' | jq .
+
       - name: Compute lowercase image tag
         run: |
           REPO_LC="${GITHUB_REPOSITORY,,}"      
