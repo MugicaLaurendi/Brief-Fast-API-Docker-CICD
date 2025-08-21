@@ -37,8 +37,8 @@ jobs:
           pip install -r application/requirements.txt
 
       - name: Run tests with pytest
-        run: pytest tests/
-      
+        run: pytest tests/ --junit-xml=pytest-report-${{ matrix.python-version }}.xml
+
       - name: Upload pytest test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,6 +53,10 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:                              # <-- ICI (job-level)
+      POSTGRES_USER:     ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB:       ${{ secrets.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
