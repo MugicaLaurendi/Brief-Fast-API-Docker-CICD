@@ -53,6 +53,10 @@ jobs:
     permissions:
       contents: read
       packages: write
+    env:
+      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -70,26 +74,16 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Write .env for Compose (ephemeral)
-        run: |
-          cat <<EOF > ci.env
-          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
-          EOF
-          # Sanity check: résout la config effective (échoue si une var manque)
-          docker compose --env-file ci.env -f docker-compose.yml config >/dev/null
-
       - name: Run Docker Compose
-        run: docker compose --env-file ci.env -f docker-compose.yml up -d --wait
+        run: docker compose -f docker-compose.yml up -d --wait
 
       - name: Compose ps
         if: always()
-        run: docker compose --env-file ci.env -f docker-compose.yml ps
+        run: docker compose -f docker-compose.yml ps
 
       - name: DB logs
         if: always()
-        run: docker compose --env-file ci.env -f docker-compose.yml logs --no-color --timestamps database
+        run: docker compose -f docker-compose.yml logs --no-color --timestamps database
 
       - name: Dump failing container inspect (health)
         if: always()
