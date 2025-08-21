@@ -72,22 +72,22 @@ jobs:
 
       - name: Write .env for Compose (ephemeral)
         run: |
-          cat <<EOF > .env
+          cat <<EOF > ci.env
           POSTGRES_USER=${{ secrets.POSTGRES_USER }}
           POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
           EOF
 
       - name: Run Docker Compose
-        run: docker compose -f docker-compose.yml up -d --wait
+        run: docker compose --env-file ci.env -f docker-compose.yml up -d --wait
 
       - name: Compose ps
         if: always()
-        run: docker compose -f docker-compose.yml ps
+        run: docker compose --env-file ci.env -f docker-compose.yml ps
 
       - name: DB logs
         if: always()
-        run: docker compose -f docker-compose.yml logs --no-color --timestamps database
+        run: docker compose --env-file ci.env -f docker-compose.yml logs --no-color --timestamps database
 
       - name: Dump failing container inspect (health)
         if: always()
