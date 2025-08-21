@@ -37,17 +37,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r application/requirements.txt
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
         
-      - name: Install docker-compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
+      # - name: Install docker-compose
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y docker-compose
 
-      # Now run docker-compose commands
-      - name: Run tests with Docker Compose
-        run: docker compose -f docker-compose_test.yml up -d
+      # # Now run docker-compose commands
+      # - name: Run tests with Docker Compose
+      #   run: docker compose -f docker-compose_test.yml up -d
           
     #name: Run tests inside container
       #run: docker-compose -f docker-compose.test.yml exec -T backend pytest --junitxml=pytest-report.xml
